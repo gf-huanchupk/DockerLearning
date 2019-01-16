@@ -1,0 +1,44 @@
+version: "3.4"
+services:
+  eureka-server:
+    image: hub.gf.com:9090/springcloud-ribbon/eureka-server:latest
+    deploy:
+      endpoint_mode: vip
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "1024M"
+    ports:
+      - "8761:8761"
+
+  service-hi:
+    image: hub.gf.com:9090/springcloud-ribbon/service-hi:latest
+    deploy:
+      endpoint_mode: vip
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "1024M"
+    ports:
+      - "8763:8763"
+    depends_on:
+      - eureka-server
+
+  service-ribbon:
+    image: hub.gf.com:9090/springcloud-ribbon/service-ribbon:latest
+    deploy:
+      endpoint_mode: vip
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "1024M"
+    ports:
+      - "8764:8764"
+    depends_on:
+      - eureka-server
+      - service-hi
+
+networks:
+  default:
+    external:
+      name: my-overlay

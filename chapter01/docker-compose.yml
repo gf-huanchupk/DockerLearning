@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  eureka-server:
+    image: eureka-server:latest
+    ports:
+      - 8761:8761
+
+  service-hi:
+    image: service-hi:latest
+    links:
+      - eureka-server
+
+  service-ribbon:
+    image: service-ribbon:latest
+    links:
+      - eureka-server
+    ports:
+      - 8764:8764
